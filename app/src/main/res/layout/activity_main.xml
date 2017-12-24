@@ -6,17 +6,128 @@
     android:layout_height="match_parent"
     tools:context="android.timesheets.xumpy.com.timesheetservice.MainActivity">
 
+    <TextClock
+        android:id="@+id/batchTotalTxt"
+        android:layout_width="0dp"
+        android:layout_height="47dp"
+        tools:layout_constraintTop_creator="1"
+        tools:layout_constraintRight_creator="1"
+        app:layout_constraintRight_toRightOf="@+id/batchOutTxt"
+        android:layout_marginTop="18dp"
+        app:layout_constraintTop_toBottomOf="@+id/batchOutTxt"
+        tools:layout_constraintLeft_creator="1"
+        app:layout_constraintLeft_toLeftOf="@+id/batchOutTxt" />
+
     <TextView
-        android:layout_width="291dp"
-        android:layout_height="148dp"
+        android:id="@+id/textView"
+        android:layout_width="0dp"
+        android:layout_height="36dp"
+        android:layout_marginEnd="11dp"
+        android:layout_marginStart="11dp"
         android:text="Webservice is active on port 8888"
         android:textAlignment="center"
-        android:textSize="30sp"
+        android:textSize="18sp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintHorizontal_bias="0.505"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.443" />
+        app:layout_constraintVertical_bias="0.0"
+        tools:layout_constraintLeft_creator="1"
+        tools:layout_constraintRight_creator="1"
+        app:layout_constraintHorizontal_bias="0.527" />
+
+    <Button
+        android:id="@+id/batchInBtn"
+        android:layout_width="0dp"
+        android:layout_height="48dp"
+        android:text="Batch In"
+        tools:layout_constraintTop_creator="1"
+        tools:layout_constraintRight_creator="1"
+        app:layout_constraintRight_toRightOf="@+id/batchOutBtn"
+        android:layout_marginTop="69dp"
+        tools:layout_constraintLeft_creator="1"
+        app:layout_constraintLeft_toLeftOf="@+id/batchOutBtn"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/batchOutBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Batch OUT"
+        tools:layout_constraintTop_creator="1"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="20dp"
+        app:layout_constraintTop_toBottomOf="@+id/batchInBtn"
+        tools:layout_constraintLeft_creator="1"
+        app:layout_constraintLeft_toLeftOf="parent" />
+
+    <Button
+        android:id="@+id/batchAddBtn"
+        android:layout_width="0dp"
+        android:layout_height="49dp"
+        android:text="BATCH ADD"
+        android:layout_marginStart="16dp"
+        tools:layout_constraintLeft_creator="1"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:layout_marginLeft="16dp"
+        tools:layout_constraintBottom_creator="1"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginBottom="205dp" />
+
+    <TextView
+        android:id="@+id/batchOutTxt"
+        android:layout_width="0dp"
+        android:layout_height="47dp"
+        tools:layout_constraintTop_creator="1"
+        tools:layout_constraintRight_creator="1"
+        app:layout_constraintRight_toRightOf="@+id/batchInTxt"
+        android:layout_marginTop="21dp"
+        app:layout_constraintTop_toBottomOf="@+id/batchInTxt"
+        tools:layout_constraintLeft_creator="1"
+        app:layout_constraintLeft_toLeftOf="@+id/batchInTxt" />
+
+    <TextView
+        android:id="@+id/batchInTxt"
+        android:layout_width="209dp"
+        android:layout_height="0dp"
+        tools:layout_constraintTop_creator="1"
+        tools:layout_constraintBottom_creator="1"
+        android:layout_marginStart="22dp"
+        app:layout_constraintBottom_toBottomOf="@+id/batchOutBtn"
+        android:layout_marginTop="69dp"
+        tools:layout_constraintLeft_creator="1"
+        android:layout_marginBottom="69dp"
+        app:layout_constraintTop_toTopOf="@+id/textView"
+        app:layout_constraintLeft_toRightOf="@+id/batchInBtn" />
+
+    <TextView
+        android:id="@+id/batchAddTxt"
+        android:layout_width="207dp"
+        android:layout_height="0dp"
+        tools:layout_constraintTop_creator="1"
+        tools:layout_constraintBottom_creator="1"
+        android:layout_marginStart="22dp"
+        app:layout_constraintBottom_toBottomOf="@+id/batchAddBtn"
+        tools:layout_constraintLeft_creator="1"
+        app:layout_constraintTop_toTopOf="@+id/batchAddBtn"
+        app:layout_constraintLeft_toRightOf="@+id/batchAddBtn" />
+
+    <EditText
+        android:id="@+id/editText4"
+        android:layout_width="0dp"
+        android:layout_height="49dp"
+        android:ems="10"
+        android:inputType="textPersonName"
+        android:text="Total"
+        android:focusable="false"
+        app:layout_constraintRight_toLeftOf="@+id/batchTotalTxt"
+        tools:layout_constraintTop_creator="1"
+        tools:layout_constraintRight_creator="1"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="21dp"
+        android:layout_marginTop="17dp"
+        app:layout_constraintTop_toBottomOf="@+id/batchOutBtn"
+        tools:layout_constraintLeft_creator="1"
+        app:layout_constraintLeft_toLeftOf="parent" />
 
 </android.support.constraint.ConstraintLayout>
