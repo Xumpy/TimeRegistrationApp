@@ -1,5 +1,6 @@
 package android.timesheets.xumpy.com.timesheetservice.restservice;
 
+import android.database.sqlite.SQLiteDatabase;
 import android.timesheets.xumpy.com.timesheetservice.dao.TimesheetConnection;
 import android.timesheets.xumpy.com.timesheetservice.dao.TimesheetDao;
 import android.timesheets.xumpy.com.timesheetservice.model.Timesheet;
@@ -15,6 +16,11 @@ import java.util.Map;
 
 public class restTimesheet implements RestObject{
     private DateFormat format = new SimpleDateFormat("ddMMyyyy", Locale.ENGLISH);
+    private SQLiteDatabase database;
+
+    public restTimesheet(SQLiteDatabase sqLiteDatabase){
+        database = sqLiteDatabase;
+    }
 
     @Override
     public String getUrl() {
@@ -36,17 +42,14 @@ public class restTimesheet implements RestObject{
     @Override
     public Object createObject(Map<String, List<String>> queryParams) {
         Timesheet timesheet = new Timesheet();
-        TimesheetConnection timesheetConnection = new TimesheetConnection();
 
         Date startDate = getDateAtQueryParm(queryParams.get("startDate"));
         Date endDate = getDateAtQueryParm(queryParams.get("endDate"));
 
         if (startDate != null && endDate != null){
             TimesheetDao timesheetDao = new TimesheetDao();
-            timesheet = timesheetDao.getTimesheetByDate(timesheetConnection.getDatabase(), startDate, endDate);
+            timesheet = timesheetDao.getTimesheetByDate(database, startDate, endDate);
         }
-
-        timesheetConnection.close();
 
         return timesheet;
     }

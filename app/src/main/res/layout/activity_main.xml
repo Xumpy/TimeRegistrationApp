@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     tools:context="android.timesheets.xumpy.com.timesheetservice.MainActivity">
 
-    <TextClock
+    <TextView
         android:id="@+id/batchTotalTxt"
         android:layout_width="0dp"
         android:layout_height="47dp"
@@ -20,8 +20,8 @@
 
     <TextView
         android:id="@+id/textView"
-        android:layout_width="0dp"
-        android:layout_height="36dp"
+        android:layout_width="333dp"
+        android:layout_height="54dp"
         android:layout_marginEnd="11dp"
         android:layout_marginStart="11dp"
         android:text="Webservice is active on port 8888"
@@ -33,8 +33,7 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.0"
         tools:layout_constraintLeft_creator="1"
-        tools:layout_constraintRight_creator="1"
-        app:layout_constraintHorizontal_bias="0.527" />
+        tools:layout_constraintRight_creator="1" />
 
     <Button
         android:id="@+id/batchInBtn"
@@ -129,5 +128,18 @@
         app:layout_constraintTop_toBottomOf="@+id/batchOutBtn"
         tools:layout_constraintLeft_creator="1"
         app:layout_constraintLeft_toLeftOf="parent" />
+
+    <Button
+        android:id="@+id/removeLastBatchBtn"
+        android:layout_width="0dp"
+        android:layout_height="68dp"
+        android:layout_marginTop="22dp"
+        android:text="Remove Last Batch"
+        app:layout_constraintLeft_toLeftOf="@+id/batchAddBtn"
+        app:layout_constraintRight_toRightOf="@+id/batchAddBtn"
+        app:layout_constraintTop_toBottomOf="@+id/batchAddBtn"
+        tools:layout_constraintLeft_creator="1"
+        tools:layout_constraintRight_creator="1"
+        tools:layout_constraintTop_creator="1" />
 
 </android.support.constraint.ConstraintLayout>

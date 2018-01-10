@@ -1,10 +1,12 @@
 package android.timesheets.xumpy.com.timesheetservice.dao;
 
+import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.timesheets.xumpy.com.timesheetservice.model.Timesheet;
 import android.timesheets.xumpy.com.timesheetservice.model.TimesheetDetail;
 import android.timesheets.xumpy.com.timesheetservice.model.TimesheetHour;
+import android.util.Log;
 
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Multimap;
@@ -102,15 +104,109 @@ public class TimesheetDao {
             Map<String, Multimap<String, TimesheetHour>> batched = new LinkedHashMap<>();
 
             Cursor c = createTimetableCursor(sqliteDatabase, startDate, endDate);
-
-            c.moveToFirst();
-            addToMap(batched, c);
-            while(c.moveToNext()){
+            if (c.moveToFirst()){
+                c.moveToFirst();
                 addToMap(batched, c);
+                while(c.moveToNext()){
+                    addToMap(batched, c);
+                }
+                return mapToTimesheet(batched);
             }
-            return mapToTimesheet(batched);
+            List<TimesheetDetail> batches = new ArrayList<TimesheetDetail>();
+            Timesheet timesheet = new Timesheet();
+            timesheet.setBatches(batches);
+
+            return timesheet;
         } catch (Exception exception){
             throw new RuntimeException(exception);
         }
+    }
+
+    private String formatDay(String batchHour){
+        try{
+            return formatDay.format(returnFormat.parse(batchHour));
+        } catch(Exception ex){
+            throw new RuntimeException(ex);
+        }
+    }
+
+    public void insertTimesheet(SQLiteDatabase sqliteDatabase, String batchHour){
+        boolean in = selectBatchIn(sqliteDatabase) == null ? true : false;
+
+        ContentValues values = new ContentValues();
+        values.put("STAMP_DATE_STR", batchHour);
+        values.put("ASOFDATE", formatDay(batchHour));
+        values.put("CHECK_ACTION", in ? "10" : "20");
+        sqliteDatabase.insert("T_STAMP_3", null, values);
+    }
+
+    private Cursor selectLastRow(SQLiteDatabase sqliteDatabase, String where){
+        String table = "T_STAMP_3";
+        String[] columnsToReturn = { "STAMP_DATE_STR", "CHECK_ACTION" };
+
+        return sqliteDatabase.query(table, columnsToReturn, where, null, null, null, "SEQNR DESC LIMIT 1");
+    }
+
+    private Cursor selectLastRow(SQLiteDatabase sqliteDatabase){
+        return selectLastRow(sqliteDatabase, "");
+    }
+
+    public String selectBatchIn(SQLiteDatabase sqliteDatabase){
+        Cursor dbCursor = selectLastRow(sqliteDatabase);
+        if (dbCursor.moveToFirst()) {
+            dbCursor.moveToFirst();
+            if (dbCursor.getString(1).equals("10")){
+                return dbCursor.getString(0);
+            }
+        }
+        return null;
+    }
+
+    public String selectBatchOut(SQLiteDatabase sqliteDatabase){
+        Cursor dbCursor = selectLastRow(sqliteDatabase);
+        if (dbCursor.moveToFirst()) {
+            dbCursor.moveToFirst();
+            if (dbCursor.getString(1).equals("20")){
+                return dbCursor.getString(0);
+            }
+        }
+        return null;
+    }
+
+    private Cursor selectLastBatchCursor(SQLiteDatabase sqliteDatabase, boolean in){
+        return in ? selectLastRow(sqliteDatabase, "CHECK_ACTION = 10") : selectLastRow(sqliteDatabase, "CHECK_ACTION = 20");
+    }
+
+    public String selectLastBatch(SQLiteDatabase sqliteDatabase, boolean in){
+        Cursor dbCursor = selectLastBatchCursor(sqliteDatabase, in);
+        if (dbCursor.moveToFirst()) {
+            dbCursor.moveToFirst();
+            return dbCursor.getString(0);
+        }
+        return null;
+    }
+
+    public String getTotalWorkedTime(SQLiteDatabase sqliteDatabase) throws ParseException{
+        String batchIn = selectLastBatch(sqliteDatabase, true);
+        String batchOut = selectBatchOut(sqliteDatabase);
+
+        if (batchIn == null){ return null; }
+        if (batchOut == null) batchOut = returnFormat.format(new Date());
+
+
+        Date dtBatchIn = returnFormat.parse(batchIn);
+        Date dtBatchOut = returnFormat.parse(batchOut);
+
+        long diff = dtBatchOut.getTime() - dtBatchIn.getTime();
+
+        long diffSeconds = diff / 1000 % 60;
+        long diffMinutes = diff / (60 * 1000) % 60;
+        long diffHours = diff / (60 * 60 * 1000);
+
+        return diffHours + ":" + diffMinutes + ":" + diffSeconds;
+    }
+
+    public void deleteLastRow(SQLiteDatabase sqliteDatabase){
+        sqliteDatabase.execSQL("DELETE FROM T_STAMP_3 WHERE SEQNR = (SELECT MAX(SEQNR) FROM T_STAMP_3)");
     }
 }

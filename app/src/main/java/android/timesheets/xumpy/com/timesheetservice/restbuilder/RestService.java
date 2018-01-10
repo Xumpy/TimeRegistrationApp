@@ -27,6 +27,7 @@ public class RestService extends NanoHTTPD {
         String text = "";
         for(RestObject restObject: restObjects){
             if (session.getUri().equals(restObject.getUrl())){
+                System.out.println(restObject.getUrl());
                 Map<String, List<String>> decodedQueryParameters = decodeParameters(session.getQueryParameterString());
                 Object object = restObject.createObject(decodedQueryParameters);
 
@@ -34,7 +35,6 @@ public class RestService extends NanoHTTPD {
                 text = gson.toJson(object);
             }
         }
-
         Response response = newFixedLengthResponse(text);
         response.setMimeType("application/json");
 
